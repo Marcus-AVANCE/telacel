@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<title>Diagnóstico Comercial AVANCE</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f5f5f5;
+padding:40px;
+text-align:center;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+background:white;
+padding:50px;
+border-radius:10px;
+box-shadow:0 0 20px rgba(0,0,0,0.12);
+}
+
+.question{
+text-align:left;
+margin:25px 0;
+}
+
+.scale{
+display:flex;
+flex-wrap:wrap;
+gap:6px;
+margin-top:10px;
+}
+
+.scale label{
+border:1px solid #ccc;
+padding:6px 10px;
+border-radius:4px;
+cursor:pointer;
+}
+
+.scale label:hover{
+background:#eee;
+}
+
+button{
+background:#d89c3f;
+border:none;
+color:white;
+padding:16px 40px;
+font-size:16px;
+border-radius:6px;
+cursor:pointer;
+margin-top:40px;
+}
+
+button:hover{
+background:#b7842f;
+}
+
+.result{
+margin-top:40px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Diagnóstico Comercial</h1>
+
+<p>De "0 a 10" onde "0 = Ruim" e "10 = Excelente"</p>
+
+<p>Em menos de 3 minutos, avalie com clareza o nível de performance comercial da sua empresa.</p>
+
+<form id="quiz">
+
+<div id="questions"></div>
+
+<button type="button" onclick="calcular()">Gerar Diagnóstico</button>
+
+</form>
+
+<canvas id="grafico"></canvas>
+
+<div class="result" id="resultado"></div>
+
+</div>
+
+<script>
+
+let perguntas=[
+
+"Existe um processo estruturado de vendas?",
+"A equipe investiga necessidades antes de vender?",
+"Os vendedores sabem conduzir objeções?",
+"O atendimento transmite confiança?",
+"A equipe sabe agregar valor ao produto?",
+"Existe acompanhamento de metas?",
+"A empresa mede taxa de conversão?",
+"Existe padrão claro de atendimento?",
+"A equipe busca melhoria contínua?",
+"O cliente sente conexão com o vendedor?",
+"A liderança acompanha resultados?",
+"Existe feedback frequente para vendedores?",
+"A liderança desenvolve a equipe comercial?",
+"A empresa possui estratégia comercial definida?",
+"Existe treinamento de vendas recorrente?",
+"A empresa incentiva evolução profissional?",
+"Os vendedores estudam técnicas de vendas?",
+"Existe plano de melhoria comercial?",
+"A empresa mede satisfação dos clientes?",
+"Existe cultura forte de vendas?"
+
+]
+
+let container=document.getElementById("questions")
+
+perguntas.forEach((p,i)=>{
+
+let div=document.createElement("div")
+div.className="question"
+
+let html="<b>"+(i+1)+". "+p+"</b><div class='scale'>"
+
+for(let n=0;n<=10;n++){
+
+html+="<label><input type='radio' name='q"+i+"' value='"+n+"'>"+n+"</label>"
+
+}
+
+html+="</div>"
+
+div.innerHTML=html
+
+container.appendChild(div)
+
+})
+
+function calcular(){
+
+let total=0
+
+for(let i=0;i<20;i++){
+
+let r=document.querySelector('input[name="q'+i+'"]:checked')
+
+if(!r){
+alert("Responda todas as perguntas.")
+return
+}
+
+total+=parseInt(r.value)
+
+}
+
+let score=Math.round((total/200)*100)
+
+document.getElementById("resultado").innerHTML=
+
+"<h2>Diagnóstico Concluído</h2>"+
+
+"<p style='font-size:18px'><b>Sua operação comercial aponta Necessidades Urgentes de ajustes!</b><br><br>Como isso afeta diretamente seu negócio e exige ação rápida, você pode entender o mais rápido possível como solucionar esses problemas em uma reunião de <b>CONSULTORIA GRATUITA com a AVANCE.</b></p>"+
+
+"<br><h3>O quanto você fará o necessário para resolver esse problema?</h3>"+
+
+"<p style='color:#666'>Empresários que marcam de 7 a 10 normalmente são os que conseguem corrigir rapidamente seus resultados comerciais.</p>"+
+
+"<div id='compromisso'></div>"+
+
+"<div id='cta'></div>"
+
+let compromisso=document.getElementById("compromisso")
+
+let html="<div style='display:flex;justify-content:center;gap:8px;flex-wrap:wrap;'>"
+
+for(let n=0;n<=10;n++){
+
+html+="<label style='border:1px solid #ccc;padding:8px 12px;border-radius:4px;cursor:pointer;'>"+
+"<input type='radio' name='compromisso' value='"+n+"' onclick='mostrarCTA()'> "+n+
+"</label>"
+
+}
+
+html+="</div>"
+
+compromisso.innerHTML=html
+
+gerarGrafico(score)
+
+}
+
+function mostrarCTA(){
+
+document.getElementById("cta").innerHTML=
+
+"<br><a href='https://wa.me/5517997342828'><button>Agendar Consultoria Gratuita</button></a>"
+
+}
+
+function gerarGrafico(score){
+
+let ctx=document.getElementById("grafico")
+
+new Chart(ctx,{
+
+type:"radar",
+
+data:{
+labels:["Processo","Equipe","Gestão","Cultura","Conversão"],
+
+datasets:[{
+label:"Performance Comercial",
+data:[
+score*0.9,
+score*0.85,
+score*0.8,
+score*0.9,
+score*0.88
+]
+}]
+},
+
+options:{
+scales:{
+r:{
+beginAtZero:true,
+max:100
+}
+}
+}
+
+})
+
+}
+
+</script>
+
+</body>
+
+</html>
