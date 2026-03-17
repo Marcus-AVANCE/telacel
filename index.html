@@ -97,7 +97,7 @@
             for (const [id, dados] of Object.entries(prestadores)) {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.onclick = () => window.location.href = `/${id}`;
+                card.onclick = () => window.location.href = `/telacel/${id}`;
                 
                 card.innerHTML = `
                     <div class="avatar">${dados.foto}</div>
