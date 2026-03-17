@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carlos Cabeleireiro - Agendamento Online</title>
+    <title>AgendaFácil - Encontre Profissionais</title>
     <style>
         * {
             margin: 0;
@@ -17,116 +17,100 @@
             padding: 20px;
         }
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .profissionais-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
         .card {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .profile {
+            border-radius: 15px;
+            padding: 25px;
             text-align: center;
-            margin-bottom: 30px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .profile-img {
-            width: 120px;
-            height: 120px;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-size: 3em;
+            color: white;
         }
-        .profile h1 {
+        .nome {
+            font-size: 1.5em;
             color: #2d3748;
             margin-bottom: 5px;
         }
-        .profile p {
+        .profissao {
             color: #718096;
+            margin-bottom: 10px;
         }
-        .section {
-            margin: 30px 0;
-            padding: 20px;
-            background: #f7fafc;
-            border-radius: 15px;
-        }
-        .section h2 {
-            color: #4a5568;
-            margin-bottom: 15px;
-        }
-        .service-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .service-price {
-            color: #48bb78;
-            font-weight: bold;
-        }
-        .whatsapp-btn {
-            display: block;
-            background: #25D366;
+        .btn-agendar {
+            background: #48bb78;
             color: white;
-            text-align: center;
-            padding: 18px;
-            border-radius: 15px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2em;
-            margin: 30px 0;
-        }
-        .whatsapp-btn:hover {
-            background: #20b859;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
         }
     </style>
+    <script src="config.js"></script>
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <div class="profile">
-                <div class="profile-img">💇</div>
-                <h1>Carlos Silva</h1>
-                <p>✂️ Cabeleireiro Profissional</p>
-                <p>📍 São Paulo</p>
-            </div>
-
-            <div class="section">
-                <h2>💇 Serviços</h2>
-                <div class="service-item">
-                    <span>Corte Masculino</span>
-                    <span class="service-price">R$ 50</span>
-                </div>
-                <div class="service-item">
-                    <span>Barba</span>
-                    <span class="service-price">R$ 30</span>
-                </div>
-                <div class="service-item">
-                    <span>Corte + Barba</span>
-                    <span class="service-price">R$ 70</span>
-                </div>
-                <div class="service-item">
-                    <span>Corte Feminino</span>
-                    <span class="service-price">R$ 80</span>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>⏰ Horários</h2>
-                <p>Segunda a Sexta: 09h - 18h</p>
-                <p>Sábado: 09h - 13h</p>
-                <p>Domingo: Fechado</p>
-            </div>
-
-            <a href="https://wa.me/5511999999999?text=Olá! Vim pelo seu site e gostaria de agendar." class="whatsapp-btn">
-                📱 Agendar no WhatsApp
-            </a>
+        <div class="header">
+            <h1>📅 AgendaFácil</h1>
+            <p>Escolha um profissional e agende online</p>
         </div>
+        <div class="profissionais-grid" id="lista-profissionais"></div>
     </div>
+
+    <script>
+        function carregarProfissionais() {
+            const container = document.getElementById('lista-profissionais');
+            
+            for (const [id, dados] of Object.entries(prestadores)) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => window.location.href = `/${id}`;
+                
+                card.innerHTML = `
+                    <div class="avatar">${dados.foto}</div>
+                    <div class="nome">${dados.nome}</div>
+                    <div class="profissao">${dados.profissao}</div>
+                    <div class="rating">⭐ ${dados.avaliacao} (${dados.numeroAvaliacoes})</div>
+                    <button class="btn-agendar">📅 Agendar</button>
+                `;
+                container.appendChild(card);
+            }
+        }
+        
+        window.onload = carregarProfissionais;
+    </script>
 </body>
 </html>
